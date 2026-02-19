@@ -4,7 +4,7 @@ This project will generate
 * A mapping from enum -> string
 
 This is helpful if you frequently need to make those, or if you frequently change the enum. <br>
-You can do this with macros, but those flood the namespace and precious brainpower to write.
+You can do this with macros, but those flood the namespace and require precious brainpower to write.
 
 Run with the name of the input file as the first argument, and an optional second argument w/ the name and extension of the output file.
 
