@@ -11,7 +11,7 @@ Vehicles lexer
 !END CARS
 
 !BEGIN TRUCKS 
-		F_150 -
+		F_150 --
 !END POPULAR
 
 		SIERRA sierra

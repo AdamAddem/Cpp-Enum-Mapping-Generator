@@ -30,7 +30,7 @@ static std::unordered_map<std::string, unsigned> categories_being_parsed;
 static std::string enum_name;
 static std::string requested_namespace;
 
-static void parseCommand(std::string &command, unsigned current_index) {
+static void parseCommand(const std::string &command, unsigned current_index) {
   const char c = command.at(1);
   if (c == 'F') [[unlikely]]
     return;
@@ -72,7 +72,7 @@ static void parseLoop() {
     input_file >> string_rep;
 
     if (string_rep.front() == '-') {
-      string_rep.clear();
+      string_rep.erase(0, 1);
     }
 
     entries.emplace_back(std::move(next), std::move(string_rep));
@@ -147,8 +147,8 @@ static void printArray() {
 static void printHelpers() {
 
   for (auto &category : parsed_categories) {
-    output_file << "constexpr bool isCategory" << std::move(category.name)
-                << "(const " << enum_name << " e) { return ";
+    output_file << "constexpr bool isCategory" << category.name << "(const "
+                << enum_name << " e) { return ";
 
     output_file << "std::to_underlying(e) >= " << std::to_string(category.begin)
                 << " && "
@@ -178,7 +178,7 @@ int main(int argc, char *argv[]) {
   } else {
     std::string output_file_name(enum_name);
     output_file_name.append("_generated.hpp");
-    output_file.open(argv[2]);
+    output_file.open(output_file_name);
   }
 
   if (!output_file.is_open())
@@ -189,7 +189,7 @@ int main(int argc, char *argv[]) {
   printArray();
   printHelpers();
 
-  output_file << "}; //namespace " << std::move(requested_namespace);
+  output_file << "}; //namespace " << requested_namespace;
 
   return 0;
 }

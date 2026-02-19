@@ -26,8 +26,10 @@ Run with the name of the input file as the first argument, and an optional secon
 
 \<name_of_enum\> does what you think it does, and \<namespace\> specifies the namespace to wrap the header in. <br>
 
-To specify an **empty** string representation for an enum, use a - in leu of a name. <br>
-To specify **no** string representation for an enum, ask claude or something. <br>
+String representations starting with '-' will have that '-' removed <br>
+  * To specify an empty string, just use a single - character
+  * Anything after the initial - will remain
+To specify **no** string representation for an enum, create a PR with an implementation of that <br>
 
 Categories are optional, but defining them will provide helper functions to check an enum's category. <br>
 If you define a category, make sure to include the ending. If you don't, who knows tbh. <br>
