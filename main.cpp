@@ -158,9 +158,8 @@ static void printHelpers() {
 }
 
 int main(int argc, char *argv[]) {
-  if (argc != 2)
-    throw std::runtime_error(
-        "One argument only, must be path to the input file");
+  if (argc < 2)
+    throw std::runtime_error("Path to the input file not specified");
 
   entries.reserve(30);
   input_file.open(argv[1]);
@@ -174,9 +173,14 @@ int main(int argc, char *argv[]) {
   parseLoop();
   input_file.close();
 
-  std::string output_file_name(enum_name);
-  output_file_name.append("_generated.hpp");
-  output_file.open(output_file_name);
+  if (argc == 3) {
+    output_file.open(argv[2]);
+  } else {
+    std::string output_file_name(enum_name);
+    output_file_name.append("_generated.hpp");
+    output_file.open(argv[2]);
+  }
+
   if (!output_file.is_open())
     throw std::runtime_error("Error creating enum generation file");
 

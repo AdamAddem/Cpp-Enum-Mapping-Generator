@@ -4,7 +4,8 @@ This project will generate
 * A mapping from enum -> string
 
 This is helpful if you frequently need to make those, or if you frequently change the enum. <br>
-You can do this with macros, but those flood the namespace and require precious brainpower to write.
+You can do this with macros, but those flood the namespace and require precious brainpower to write. <br>
+I wrote this for personal use, but if you want a feature just let me know and i'll be sure to get to it sometime this decade <br>
 
 Run with the name of the input file as the first argument, and an optional second argument w/ the name and extension of the output file.
 
@@ -25,10 +26,12 @@ Run with the name of the input file as the first argument, and an optional secon
 
 \<name_of_enum\> does what you think it does, and \<namespace\> specifies the namespace to wrap the header in <br>
 
-To specify an empty string representation for an enum, use a - in leu of a name; <br>
+To specify an **empty** string representation for an enum, use a - in leu of a name <br>
+To specify **no** string representation for an enum, create a PR with an implementation of that <br>
 
-Categories are optional, but defining them will provide helper functions to check an enum's category.
-If you define a category, make sure to include the ending. If you don't, IDK what will happen and I don't care to check. Categories may overlap as much as you'd like.
+Categories are optional, but defining them will provide helper functions to check an enum's category. <br>
+If you define a category, make sure to include the ending. If you don't, who knows tbh. <br>
+Categories may overlap as much as you'd like.
 
 End the enum definition with !FINISH. <br>
 
@@ -43,79 +46,74 @@ Then, rerun the program to generate the header.
 The input file:
 
 ```
-Vehicles unsigned
+Vehicles Automotives
+
+!BEGIN POPULAR
 
 !BEGIN CARS 
 
-RAV4 rav_four
-CAMRY toyota_camry
-MODEL_Y model_y
+		RAV4 rav_four
+		CAMRY toyota_camry
+		MODEL_Y model_y
 
 !END CARS
 
 !BEGIN TRUCKS 
+		F_150 -
+!END POPULAR
 
-F_150 f150
-SIERRA sierra
-SILVERADO silverado
+		SIERRA sierra
+		SILVERADO silverado
 
 !END TRUCKS
+
+Non_Categorical extra
 
 !FINISH
 ```
 
 Generates the header Vehicles_generated.hpp:
 
-```c++
+```
 #pragma once
-#include <string>
 #include <unordered_map>
+#include <string>
 #include <utility>
-enum class Vehicles : unsigned {
 
-  BEGIN_CARS,
+namespace Automotives {
+enum class Vehicles : unsigned {
   RAV4,
   CAMRY,
   MODEL_Y,
-  END_CARS,
-
-  BEGIN_TRUCKS,
   F_150,
   SIERRA,
   SILVERADO,
-  END_TRUCKS,
-
+  Non_Categorical,
 };
+
 
 inline const std::unordered_map<std::string, Vehicles> stringToVehicles{
 
-    {"!BEGIN_CARS", Vehicles::BEGIN_CARS},
-    {"rav_four", Vehicles::RAV4},
-    {"toyota_camry", Vehicles::CAMRY},
-    {"model_y", Vehicles::MODEL_Y},
-    {"!END_CARS", Vehicles::END_CARS},
-
-    {"!BEGIN_TRUCKS", Vehicles::BEGIN_TRUCKS},
-    {"f150", Vehicles::F_150},
-    {"sierra", Vehicles::SIERRA},
-    {"silverado", Vehicles::SILVERADO},
-    {"!END_TRUCKS", Vehicles::END_TRUCKS},
-
+	{"rav_four", Vehicles::RAV4}, {"toyota_camry", Vehicles::CAMRY}, {"model_y", Vehicles::MODEL_Y}, 
+	{"", Vehicles::F_150}, {"sierra", Vehicles::SIERRA}, {"silverado", Vehicles::SILVERADO}, 
+	{"extra", Vehicles::Non_Categorical}, 
 };
 
-constexpr const char *vehiclesToString(Vehicles e) {
-  constexpr const char *toString[] = {
 
-      "!BEGIN_CARS",   "rav_four", "toyota_camry", "model_y",   "!END_CARS",
+constexpr const char* vehiclesToString(const Vehicles e) {
+constexpr const char* toString[] = {
 
-      "!BEGIN_TRUCKS", "f150",     "sierra",       "silverado", "!END_TRUCKS",
-
-  };
-
-  return toString[std::to_underlying(e)];
+	"rav_four","toyota_camry","model_y",
+	"","sierra","silverado",
+	"extra",
+};
+	return toString[std::to_underlying(e)];
 }
+constexpr bool isCategoryCARS(const Vehicles e) { return std::to_underlying(e) >= 0 && std::to_underlying(e) < 3; }
+
+constexpr bool isCategoryPOPULAR(const Vehicles e) { return std::to_underlying(e) >= 0 && std::to_underlying(e) < 4; }
+
+constexpr bool isCategoryTRUCKS(const Vehicles e) { return std::to_underlying(e) >= 3 && std::to_underlying(e) < 6; }
+
+}; //namespace Automotives
 ```
-
-
-
-
