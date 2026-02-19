@@ -5,7 +5,7 @@ This project will generate
 
 This is helpful if you frequently need to make those, or if you frequently change the enum. <br>
 You can do this with macros, but those flood the namespace and require precious brainpower to write. <br>
-I wrote this for personal use, but if you want a feature just let me know and i'll be sure to get to it sometime this decade. <br>
+I wrote this for personal use: if you want a feature just let me know and i'll be sure to get to it sometime this decade. <br>
 
 Run with the name of the input file as the first argument, and an optional second argument w/ the name and extension of the output file.
 
@@ -30,17 +30,17 @@ String representations starting with '-' will have that '-' removed <br>
   * To specify an empty string, just use a single - character
   * Anything after the initial - will remain
 
-To specify **no** string representation for an enum, create a PR with an implementation of that <br>
+To specify **no** string representation/mapping for an enum, ask claude or smth idk<br>
 
 Categories are optional, but defining them will provide helper functions to check an enum's category. <br>
-If you define a category, make sure to include the ending. If you don't, who knows tbh. <br>
+If you define a category, make sure to include the ending. You don't want to know what happens if you don't... <br>
 Categories may overlap as much as you'd like.
 
 End the enum definition with !FINISH. <br>
 
-Manually changing the enum / mapping after the fact is risky, as the mapping from enum to string and the
+Manually changing the enum / mapping after the fact is risky and time consuming, as the mapping from enum to string and the
 category helper functions both rely on the order and number of enum values.
-I'd recommend you keep the input file around as the formal definition of your enu and make changes directly to that.
+I'd recommend you keep the input file around as the formal definition of your enum and make changes directly to that.
 Then, rerun the program to generate the header.
 
 ### Example:
