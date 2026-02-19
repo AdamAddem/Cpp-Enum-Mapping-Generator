@@ -6,31 +6,36 @@ This project will generate
 This is helpful if you frequently need to make those, or if you frequently change the enum. <br>
 You can do this with macros, but those flood the namespace and precious brainpower to write.
 
-Run with the name of the input file as the first argument.
+Run with the name of the input file as the first argument, and an optional second argument w/ the name and extension of the output file.
 
 ### General Format: <br>
 ```
-<name_of_enum> <underlying_type>
+<name_of_enum> <namespace>
 
-	<enumerator> <string_representation> OR !BEGIN <category_name> OR !END <category_name>
+	<enumerator> (<string_representation> | -)
+                OR 
+      !BEGIN <category_name> 
+                OR 
+      !END <category_name>
+  ...
 
 !FINISH
 ```
 
-Categories are optional, define them if you want to do some fast enum checking like so: <br>
-```c++
-    if(e > BEGIN_CARS && e < END_CARS) {
-    ...
-    }
-    //excluding the required casts for readability
-```
 
-If you define a category, make sure to include the ending. If you don't, nothing bad will happen, the formatting will just look ugly. <br>
-End the definition with !FINISH. <br>
+\<name_of_enum\> does what you think it does, and \<namespace\> specifies the namespace to wrap the header in <br>
 
-Manually changing the enum / mapping after the fact is risky, as the mapping from enum to string heavily 
-relies on the order of declaration. I'd recommend you keep the input file around as the formal definition of your enum,
-change it there, and then re-run this program
+To specify an empty string representation for an enum, use a - in leu of a name; <br>
+
+Categories are optional, but defining them will provide helper functions to check an enum's category.
+If you define a category, make sure to include the ending. If you don't, IDK what will happen and I don't care to check. Categories may overlap as much as you'd like.
+
+End the enum definition with !FINISH. <br>
+
+Manually changing the enum / mapping after the fact is risky, as the mapping from enum to string and the
+category helper functions both rely on the order and number of enum values(s).
+I'd recommend you keep the input file around as the formal definition of your enum, and make changes to that.
+Then, rerun the program to generate the header.
 
 ### Example:
 
