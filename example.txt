@@ -1,0 +1,19 @@
+Vehicles unsigned
+
+!BEGIN CARS 
+
+RAV4 rav_four
+CAMRY toyota_camry
+MODEL_Y model_y
+
+!END CARS
+
+!BEGIN TRUCKS 
+
+F_150 f150
+SIERRA sierra
+SILVERADO silverado
+
+!END TRUCKS
+
+!FINISH
