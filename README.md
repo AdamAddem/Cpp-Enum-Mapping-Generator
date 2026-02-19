@@ -5,7 +5,7 @@ This project will generate
 
 This is helpful if you frequently need to make those, or if you frequently change the enum. <br>
 You can do this with macros, but those flood the namespace and require precious brainpower to write. <br>
-I wrote this for personal use, but if you want a feature just let me know and i'll be sure to get to it sometime this decade <br>
+I wrote this for personal use, but if you want a feature just let me know and i'll be sure to get to it sometime this decade. <br>
 
 Run with the name of the input file as the first argument, and an optional second argument w/ the name and extension of the output file.
 
@@ -24,10 +24,10 @@ Run with the name of the input file as the first argument, and an optional secon
 ```
 
 
-\<name_of_enum\> does what you think it does, and \<namespace\> specifies the namespace to wrap the header in <br>
+\<name_of_enum\> does what you think it does, and \<namespace\> specifies the namespace to wrap the header in. <br>
 
-To specify an **empty** string representation for an enum, use a - in leu of a name <br>
-To specify **no** string representation for an enum, create a PR with an implementation of that <br>
+To specify an **empty** string representation for an enum, use a - in leu of a name. <br>
+To specify **no** string representation for an enum, ask claude or something. <br>
 
 Categories are optional, but defining them will provide helper functions to check an enum's category. <br>
 If you define a category, make sure to include the ending. If you don't, who knows tbh. <br>
@@ -36,8 +36,8 @@ Categories may overlap as much as you'd like.
 End the enum definition with !FINISH. <br>
 
 Manually changing the enum / mapping after the fact is risky, as the mapping from enum to string and the
-category helper functions both rely on the order and number of enum values(s).
-I'd recommend you keep the input file around as the formal definition of your enum, and make changes to that.
+category helper functions both rely on the order and number of enum values.
+I'd recommend you keep the input file around as the formal definition of your enu and make changes directly to that.
 Then, rerun the program to generate the header.
 
 ### Example:
@@ -74,7 +74,7 @@ Non_Categorical extra
 
 Generates the header Vehicles_generated.hpp:
 
-```
+```c++
 #pragma once
 #include <unordered_map>
 #include <string>
