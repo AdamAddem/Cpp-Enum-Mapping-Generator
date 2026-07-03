@@ -49,6 +49,8 @@ def file_output(lines, out_filename, enum_name, namespace, underlying_type):
         else:
             entries.append( Entry(first, second.removeprefix('!')) )
 
+    for unended_category in active_categories.values():
+        unended_category.end = len(entries)
 
     out = open(out_filename, "w")
     out.write("#pragma once\n")

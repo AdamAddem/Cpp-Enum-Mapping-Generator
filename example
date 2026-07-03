@@ -1,4 +1,4 @@
-tokentype.hpp TokenType LOM::Lexer u8_t
+example.hpp ExampleEnum Name::Space int
 
     INVALID_TOKEN INVALID_TOKEN
     IDENTIFIER IDENTIFIER
