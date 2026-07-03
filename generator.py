@@ -8,6 +8,8 @@ class Category:
         self.name = name
         self.begin = begin
         self.end = end
+    def __repr__(self):
+        return f'{self.name}: ({self.begin}, {self.end})'
 
 class Entry:
     enum_rep: str
@@ -15,19 +17,10 @@ class Entry:
     def __init__(self, enum_rep: str, string_rep: str):
         self.enum_rep = enum_rep
         self.string_rep = string_rep
-
     def __repr__(self):
         return f'{self.enum_rep}: {self.string_rep}'
 
 def file_output(lines, out_filename, enum_name, namespace, underlying_type):
-    out = open(out_filename, "w")
-    out.write("#pragma once\n")
-    out.write("#include <string>\n")
-    out.write("#include <unordered_map>\n")
-    out.write("#include <utility>\n\n")
-    out.write(f'namespace {namespace} {{\n')
-    out.write(f'enum class {enum_name} : {underlying_type} {{\n')
-
     categories: list[Category] = []
     entries: list[Entry] = []
     active_categories: dict[str, Category] = {}
@@ -39,18 +32,61 @@ def file_output(lines, out_filename, enum_name, namespace, underlying_type):
 
         first, second = strip_line.split()
         if first == "!BEGIN":
-            new_category = Category("", len(entries), 0)
+            if active_categories.__contains__(second):
+                print(f'Active category {second} duplicated')
+                exit(1)
+
+            new_category = Category(second, len(entries), 0)
             active_categories[second] = new_category
             categories.append(new_category)
         elif first == "!END":
+            if not active_categories.__contains__(second):
+                print(f'Ended category {second} not active')
+                exit(1)
+
             active_categories[second].end = len(entries)
             active_categories.pop(second)
         else:
             entries.append( Entry(first, second.removeprefix('!')) )
 
 
-    print(categories)
-    print(entries)
+    out = open(out_filename, "w")
+    out.write("#pragma once\n")
+    out.write("#include <string_view>\n")
+    out.write("#include <unordered_map>\n")
+    out.write("#include <utility>\n\n")
+    out.write(f'namespace {namespace} {{\n')
+
+    out.write(f'enum class {enum_name} : {underlying_type} {{\n')
+    for entry in entries:
+        out.write(f'\t{entry.enum_rep},\n')
+    out.write("};\n")
+
+    out.write(f'inline const std::unordered_map<std::string_view, {enum_name}> stringTo{enum_name}{{\n\t')
+    i: int = 0
+    for entry in entries:
+        out.write(f'{{"{entry.string_rep}", {enum_name}::{entry.enum_rep}}}, ')
+        if i == 2:
+            out.write("\n\t")
+            i = 0
+        i += 1
+    out.write("\n};\n\n")
+
+    i = 0
+    out.write(f'constexpr std::string_view {enum_name}ToString({enum_name} e) {{\n\t')
+    out.write("static constexpr std::string_view toString[] = {\n\t")
+    for entry in entries:
+        out.write(f'"{entry.string_rep}",')
+        if i == 2:
+            out.write("\n\t")
+            i = 0
+        i += 1
+    out.write("\n};\n\treturn toString[std::to_underlying(e)];\n}\n")
+
+    for category in categories:
+        out.write(f'constexpr bool isCategory{category.name}({enum_name} e) {{ return std::to_underlying(e) >= {category.begin} && std::to_underlying(e) < {category.end}; }}\n')
+
+    out.write(f"\n}}; //namespace {namespace}")
     out.close()
     pass
 
