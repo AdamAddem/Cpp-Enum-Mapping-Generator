@@ -1,0 +1,4 @@
+tokentype.hpp TokenType LOM::Lexer u8_t
+
+    ETEST1 STEST1
+    ETEST2 STEST2
